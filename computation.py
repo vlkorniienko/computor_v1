@@ -110,12 +110,27 @@ def parseEquationList(equationList):
 	findSolutions(equationDictionary)
 
 def findSolutions(equationDictionary):
+	reduceDegree(equationDictionary)
 	if equationDictionary['beforeDegree'] == 0 and equationDictionary['afterDegree'] == 0:
 		print('Polynomial degree: 0\nAll the real numbers are solution')
 	elif equationDictionary['beforeDegree'] < 2 and equationDictionary['afterDegree'] < 2:
 		firstDegreeEQ(equationDictionary)
 	else:
 		secondDegreeEQ(equationDictionary)
+
+def reduceDegree(equationDictionary):
+	if equationDictionary['a'] == 0:
+		del equationDictionary['a']
+		equationDictionary['beforeDegree'] = 1
+		equationDictionary['afterDegree'] = 1
+	if equationDictionary['b'] == 0:
+		del equationDictionary['b']
+		if not 'c' in equationDictionary:
+			equationDictionary['beforeDegree'] = 0
+			equationDictionary['afterDegree'] = 0
+	if equationDictionary['c'] == 0:
+		del equationDictionary['c']
+
 
 def firstDegreeEQ(equationDictionary):
 	if 'c' in equationDictionary:
