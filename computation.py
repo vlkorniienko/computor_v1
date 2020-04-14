@@ -119,17 +119,20 @@ def findSolutions(equationDictionary):
 		secondDegreeEQ(equationDictionary)
 
 def reduceDegree(equationDictionary):
-	if equationDictionary['a'] == 0:
-		del equationDictionary['a']
-		equationDictionary['beforeDegree'] = 1
-		equationDictionary['afterDegree'] = 1
-	if equationDictionary['b'] == 0:
-		del equationDictionary['b']
-		if not 'c' in equationDictionary:
-			equationDictionary['beforeDegree'] = 0
-			equationDictionary['afterDegree'] = 0
-	if equationDictionary['c'] == 0:
-		del equationDictionary['c']
+	if 'a' in equationDictionary:
+		if equationDictionary['a'] == 0:
+			del equationDictionary['a']
+			equationDictionary['beforeDegree'] = 1
+			equationDictionary['afterDegree'] = 1
+	if 'b' in equationDictionary:
+		if equationDictionary['b'] == 0:
+			del equationDictionary['b']
+			if not 'c' in equationDictionary:
+				equationDictionary['beforeDegree'] = 0
+				equationDictionary['afterDegree'] = 0
+	if 'c' in equationDictionary:
+		if equationDictionary['c'] == 0:
+			del equationDictionary['c']
 
 
 def firstDegreeEQ(equationDictionary):
@@ -209,8 +212,8 @@ def findDiscriminant(equationDictionary):
 	else:
 		printReducedForm(a, b, c)
 		print("Polynomial degree: 2\nDiscriminant is strictly positive, the two solutions are:")
-		result1 = ((-1 * b) + findSquareRoot(discriminant)) / 2 * a
-		result2 = ((-1 * b) - findSquareRoot(discriminant)) / 2 * a
+		result1 = ((-1 * b) + findSquareRoot(discriminant)) / (2 * a)
+		result2 = ((-1 * b) - findSquareRoot(discriminant)) / (2 * a)
 		print(result1)
 		print(result2)
 
