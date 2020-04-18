@@ -33,11 +33,18 @@ def checkSymbols(equation):
 
 
 if __name__ == "__main__":
-	if len(sys.argv) == 2:
+	simple = 0
+	if len(sys.argv) == 3 or len(sys.argv) == 2:
+		if len(sys.argv) == 3:
+			if sys.argv[2] != '--simple':
+				print("Usage: python computorV1 argument [--simple]")
+				sys.exit()
+			else:
+				simple = 1
 		equation = sys.argv[1]
 	else:
-		print("Usage: python computorV1 [argument]")
+		print("Usage: python computorV1 argument [--simple]")
 		sys.exit()
 	checkSymbols(equation)
 	equationList = parseEquation(equation)
-	p1 = c.parseEquationList(equationList)
+	p1 = c.parseEquationList(equationList, simple)

@@ -13,12 +13,14 @@ def checkDegreeSequence(f, itsAfterBlock, equationDictionary):
 			print("Error in equation degree sequence")
 			sys.exit()
 
+
 def addValueToDictionary(value, key, equationDictionary):
 	if key in equationDictionary:
 		result = equationDictionary[key] + value
 		equationDictionary[key] = result
 	else:
 		equationDictionary[key] = value
+
 
 def parseDigit(i, equationList, equationDictionary, itsAfterBlock):
 	if re.match(r"[-+]?\d+$", equationList[i]):
@@ -32,6 +34,7 @@ def parseDigit(i, equationList, equationDictionary, itsAfterBlock):
 	checkDegreeSequence(0, itsAfterBlock, equationDictionary)
 	key = 'c'
 	addValueToDictionary(result, key, equationDictionary)
+
 
 def parseTokenWithoutDegree(i, equationList, equationDictionary, itsAfterBlock):
 	if equationList[i] == 'X':
@@ -52,6 +55,7 @@ def parseTokenWithoutDegree(i, equationList, equationDictionary, itsAfterBlock):
 		equationDictionary['beforeDegree'] = 1
 	key = 'b'
 	addValueToDictionary(result, key, equationDictionary)
+
 
 def parseTokenWithDegree(i, equationList, equationDictionary, itsAfterBlock):
 	xPosition = equationList[i].find('X')
@@ -93,9 +97,10 @@ def parseTokenWithDegree(i, equationList, equationDictionary, itsAfterBlock):
 		else:
 			equationDictionary['afterDegree'] = 2
 
-def parseEquationList(equationList):
+
+def parseEquationList(equationList, simple):
 	itsAfterBlock = False
-	equationDictionary = {'beforeDegree' : 0, 'afterDegree' : 0}
+	equationDictionary = {'beforeDegree' : 0, 'afterDegree' : 0, 'simple' : simple}
 	for i in range(len(equationList)):
 		if equationList[i] == '=':
 			itsAfterBlock = True
@@ -109,14 +114,16 @@ def parseEquationList(equationList):
 			parseTokenWithDegree(i, equationList, equationDictionary, itsAfterBlock)
 	findSolutions(equationDictionary)
 
+
 def findSolutions(equationDictionary):
 	reduceDegree(equationDictionary)
 	if equationDictionary['beforeDegree'] == 0 and equationDictionary['afterDegree'] == 0:
 		print('Polynomial degree: 0\nAll the real numbers are solution')
 	elif equationDictionary['beforeDegree'] < 2 and equationDictionary['afterDegree'] < 2:
-		firstDegreeEQ(equationDictionary)
+		resolveFirstDegree(equationDictionary)
 	else:
-		secondDegreeEQ(equationDictionary)
+		resolveSecondDegree(equationDictionary)
+
 
 def reduceDegree(equationDictionary):
 	if 'a' in equationDictionary:
@@ -135,20 +142,18 @@ def reduceDegree(equationDictionary):
 			del equationDictionary['c']
 
 
-def firstDegreeEQ(equationDictionary):
+def resolveFirstDegree(equationDictionary):
 	if 'c' in equationDictionary:
 		b = equationDictionary['b']
 		c = equationDictionary['c']
 		result = (float(-1 * c) / float(b))
-		if b < 0:
-			print("Reduced form: %d * X^0 - %d * X^1 = 0" % (c, (-1 * b)))
-		else:
-			print("Reduced form: %d * X^0 + %d * X^1 = 0" % (c, b))
+		printReducedForm(equationDictionary)
 		print('Polynomial degree: 1\nThe solution is:')
 		print(result)
 	else:
 		print('Polynomial degree: 1\nThe solution is:')
 		print(0)
+
 
 def findSquareRoot(number):
 	i = 1
@@ -161,7 +166,8 @@ def findSquareRoot(number):
 		f += 0.01
 	return f
 
-def secondDegreeEQ(equationDictionary):
+
+def resolveSecondDegree(equationDictionary):
 	a = equationDictionary['a']
 	if not 'b' in equationDictionary and not 'c' in equationDictionary:
 		print('Polynomial degree: 2\nThe solution is')
@@ -170,31 +176,23 @@ def secondDegreeEQ(equationDictionary):
 		c = equationDictionary['c']
 		squareX = (float(-1 * c) / float(a))
 		if squareX < 0:
-			if a < 0:
-				print("Reduced form: %d * X^0 - %d * X^2 = 0" % (c, (-1 * a)))
-			else:
-				print("Reduced form: %d * X^0 + %d * X^2 = 0" % (c, a))
+			printReducedForm(equationDictionary)
 			print("There is no solution in this equation")
 			sys.exit()
 		result = findSquareRoot(squareX)
-		if a < 0:
-			print("Reduced form: %d * X^0 - %d * X^2 = 0" % (c, (-1 * a)))
-		else:
-			print("Reduced form: %d * X^0 + %d * X^2 = 0" % (c, a))
+		printReducedForm(equationDictionary)
 		print('Polynomial degree: 2\nTwo solutions are:')
 		print(result)
 		print(result * -1)
 	elif not 'c' in equationDictionary:
 		b = equationDictionary['b']
-		if b < 0:
-			print("Reduced form: %d * X^0 - %d * X^2 = 0" % (b, (-1 * a)))
-		else:
-			print("Reduced form: %d * X^0 + %d * X^2 = 0" % (b, a))
+		printReducedForm(equationDictionary)
 		print('Polynomial degree: 2\nTwo solutions are:')
 		print(0)
-		print(-1 * (b / a))
+		print(-1 * (float(b) / float(a)))
 	else:
 		findDiscriminant(equationDictionary)
+
 
 def findDiscriminant(equationDictionary):
 	c = equationDictionary['c']
@@ -202,29 +200,71 @@ def findDiscriminant(equationDictionary):
 	b = equationDictionary['b']
 	discriminant = (b * b) - (4 * a * c)
 	if discriminant < 0:
-		printReducedForm(a, b, c)
+		printReducedForm(equationDictionary)
 		print("Polynomial degree: 2\nDiscriminant is negative, there is no solution")
 	elif discriminant == 0:
-		printReducedForm(a, b, c)
+		printReducedForm(equationDictionary)
 		print("Polynomial degree: 2\nDiscriminant is equal to zero, the solution is")
-		result = ((-1 * b) + findSquareRoot(discriminant)) / 2 * a
+		result = (-1 * float(b)) / (2 * float(a))
 		print(result)
 	else:
-		printReducedForm(a, b, c)
+		printReducedForm(equationDictionary)
 		print("Polynomial degree: 2\nDiscriminant is strictly positive, the two solutions are:")
-		result1 = ((-1 * b) + findSquareRoot(discriminant)) / (2 * a)
-		result2 = ((-1 * b) - findSquareRoot(discriminant)) / (2 * a)
+		result1 = ((-1 * float(b)) + findSquareRoot(discriminant)) / (2 * float(a))
+		result2 = ((-1 * float(b)) - findSquareRoot(discriminant)) / (2 * float(a))
 		print(result1)
 		print(result2)
 
-def printReducedForm(a, b, c):
-	if b < 0:
-		if a < 0:
-			print("Reduced form: %d * X^0 - %d * X^1 - %d * X^2 = 0" % (c, (-1 * b), (-1 * a)))
+def printReducedForm(equationDictionary):
+	result = ""
+	if 'c' in equationDictionary:
+		c = equationDictionary['c']
+		if int(c) == float(c):
+			decimals = 0
 		else:
-			print("Reduced form: %d * X^0 - %d * X^1 + %d * X^2 = 0" % (c, (-1 * b), a))
-	else:
-		if a < 0:
-			print("Reduced form: %d * X^0 + %d * X^1 - %d * X^2 = 0" % (c, b, (-1 * a)))
+			decimals = 1
+		result += '{0:.{1}f}'.format(c, decimals)
+		if equationDictionary['simple'] == 0:
+			result += ' * X^0'
+	if 'b' in equationDictionary:
+		b = equationDictionary['b']
+		if int(b) == float(b):
+			decimals = 0
 		else:
-			print("Reduced form: %d * X^0 + %d * X^1 + %d * X^2 = 0" % (c, b, a))
+			decimals = 1
+		if b > 0:
+			if 'c' in equationDictionary:
+				result += ' + '
+			result += '{0:.{1}f}'.format(b, decimals)
+		else:
+			if 'c' in equationDictionary:
+				result += ' - '
+			else:
+				result += '-'
+			result += '{0:.{1}f}'.format((b * -1), decimals)
+		if equationDictionary['simple'] == 0:
+			result += ' * X^1'
+		else:
+			result += 'X'
+	if 'a' in equationDictionary:
+		a = equationDictionary['a']
+		if int(a) == float(a):
+			decimals = 0
+		else:
+			decimals = 1
+		if a > 0:
+			if 'c' or 'b' in equationDictionary:
+				result += ' + '
+			result += '{0:.{1}f}'.format(a, decimals)
+		else:
+			if 'c' or 'b' in equationDictionary:
+				result += ' - '
+			else:
+				result += '-'
+			result += '{0:.{1}f}'.format((a * -1), decimals)
+		if equationDictionary['simple'] == 0:
+			result += ' * X^2'
+		else:
+			result += 'X^2'
+	result += ' = 0'
+	print 'Reduced from:', result
