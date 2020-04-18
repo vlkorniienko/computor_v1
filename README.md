@@ -19,3 +19,5 @@ It will always be considered that the input is well formatted, ie. all terms are
 ![](https://github.com/vlkorniienko/computor_v1/blob/master/example2.png)
 * Display the solution(s) under the form of irrational fractions when it is interesting..
 * Display intermediate steps.
+* Display simple form of equation
+![](https://github.com/vlkorniienko/computor_v1/blob/master/example3.png)
