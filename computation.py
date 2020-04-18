@@ -235,13 +235,15 @@ def printReducedForm(equationDictionary):
 		if b > 0:
 			if 'c' in equationDictionary:
 				result += ' + '
-			result += '{0:.{1}f}'.format(b, decimals)
+			if b != 1:
+				result += '{0:.{1}f}'.format(b, decimals)
 		else:
 			if 'c' in equationDictionary:
 				result += ' - '
 			else:
 				result += '-'
-			result += '{0:.{1}f}'.format((b * -1), decimals)
+			if b != -1:
+				result += '{0:.{1}f}'.format((b * -1), decimals)
 		if equationDictionary['simple'] == 0:
 			result += ' * X^1'
 		else:
@@ -255,16 +257,18 @@ def printReducedForm(equationDictionary):
 		if a > 0:
 			if 'c' or 'b' in equationDictionary:
 				result += ' + '
-			result += '{0:.{1}f}'.format(a, decimals)
+			if a != 1:
+				result += '{0:.{1}f}'.format(a, decimals)
 		else:
 			if 'c' or 'b' in equationDictionary:
 				result += ' - '
 			else:
 				result += '-'
-			result += '{0:.{1}f}'.format((a * -1), decimals)
+			if a != -1:
+				result += '{0:.{1}f}'.format((a * -1), decimals)
 		if equationDictionary['simple'] == 0:
 			result += ' * X^2'
 		else:
 			result += 'X^2'
 	result += ' = 0'
-	print 'Reduced from:', result
+	print 'Reduced form:', result
