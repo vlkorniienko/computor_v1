@@ -5,12 +5,12 @@ def checkDegreeSequence(f, itsAfterBlock, equationDictionary):
 	if itsAfterBlock == True:
 		d = equationDictionary['afterDegree']
 		if (f == 0 and d > 0) or (f == 1 and d > 1) or (f == 2 and d > 2):
-			print("Error in equation degree sequence")
+			print("Error in equation sequence: {X^0} {X^1} {X^2}")
 			sys.exit()
 	else:
 		d = equationDictionary['beforeDegree']
 		if (f == 0 and d > 0) or (f == 1 and d > 1) or (f == 2 and d > 2):
-			print("Error in equation degree sequence")
+			print("Error in equation sequence: {X^0} {X^1} {X^2}")
 			sys.exit()
 
 
