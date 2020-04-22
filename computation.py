@@ -127,22 +127,32 @@ def findSolutions(equationDictionary):
 
 def reduceDegree(equationDictionary):
 	if 'a' in equationDictionary:
+		if not 'b' in equationDictionary and not 'c' in equationDictionary:
+			return
 		if equationDictionary['a'] == 0:
 			del equationDictionary['a']
 			equationDictionary['beforeDegree'] = 1
 			equationDictionary['afterDegree'] = 1
 	if 'b' in equationDictionary:
+		if not 'a' in equationDictionary and not 'c' in equationDictionary:
+			return
 		if equationDictionary['b'] == 0:
 			del equationDictionary['b']
 			if not 'c' in equationDictionary:
 				equationDictionary['beforeDegree'] = 0
 				equationDictionary['afterDegree'] = 0
 	if 'c' in equationDictionary:
+		if not 'b' in equationDictionary and not 'a' in equationDictionary:
+			return
 		if equationDictionary['c'] == 0:
 			del equationDictionary['c']
 
 
 def resolveFirstDegree(equationDictionary):
+	if not 'c' in equationDictionary and not 'a' in equationDictionary:
+		if equationDictionary['b'] == 0:
+			print('Polynomial degree: 1\nAll the real number are solutions')
+			sys.exit()
 	if 'c' in equationDictionary:
 		b = equationDictionary['b']
 		c = equationDictionary['c']
@@ -168,6 +178,10 @@ def findSquareRoot(number):
 
 
 def resolveSecondDegree(equationDictionary):
+	if not 'c' in equationDictionary and not 'b' in equationDictionary:
+		if equationDictionary['a'] == 0:
+			print('Polynomial degree: 2\nAll the real number are solutions')
+			sys.exit()
 	a = equationDictionary['a']
 	if not 'b' in equationDictionary and not 'c' in equationDictionary:
 		print('Polynomial degree: 2\nThe solution is')
